@@ -1,0 +1,35 @@
+Attend — AI Health Chatbot
+A small full-stack app: a static frontend (landing page + chat widget) and a
+Node/Express backend that calls the Claude API on the frontend's behalf, so
+your API key never reaches the browser.
+
+Structure
+attend-app/
+├── server.js          # Express backend — calls the Claude API
+├── package.json
+├── .env.example        # Copy to .env and add your API key
+└── public/
+    └── index.html       # Frontend — landing page + chat widget
+Setup
+Install dependencies:
+npm install
+Copy the environment file and add your key:
+cp .env.example .env
+Then open .env and set ANTHROPIC_API_KEY to a key from https://console.anthropic.com/
+Start the server:
+npm start
+Open http://localhost:3000 in your browser.
+How it works
+The frontend (public/index.html) sends chat messages to POST /api/chat
+on your own server.
+server.js forwards that conversation to the Claude API along with a
+system prompt that keeps responses health-focused, non-diagnostic, and
+quick to flag emergencies.
+The reply is sent back to the frontend and rendered in the chat widget.
+Before using this for real users
+This is a starting point, not a compliant medical product. Before any real
+deployment, you'd want to add: user authentication, rate limiting, logging/
+monitoring, a persistent database instead of in-memory chat history, a legal
+review of health-data handling (e.g. HIPAA in the US), and a human escalation
+path. The current system prompt is a reasonable baseline but should be
+reviewed by clinicians before this reaches real patients.
